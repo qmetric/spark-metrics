@@ -10,16 +10,16 @@ import static com.codahale.metrics.MetricRegistry.name;
 
 public class RouteMeterWrapper extends Route
 {
-
+    private static final String REGEX = "/";
     private final Route route;
 
     private final Meter meter;
 
-    protected RouteMeterWrapper(final String path, final MetricRegistry metricRegistry, final Route route)
+    public RouteMeterWrapper(final String path, final MetricRegistry metricRegistry, final Route route)
     {
         super(path);
         this.route = route;
-        meter = metricRegistry.meter(name("meter", path.replace("/","")));
+        meter = metricRegistry.meter(name("meter", path.split(REGEX)));
     }
 
     @Override public Object handle(final Request request, final Response response)

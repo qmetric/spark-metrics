@@ -10,6 +10,7 @@ import static com.codahale.metrics.MetricRegistry.name;
 
 public class RouteTimerWrapper extends Route
 {
+    private static final String REGEX = "/";
 
     private final Route route;
 
@@ -19,7 +20,7 @@ public class RouteTimerWrapper extends Route
     {
         super(path);
         this.route = route;
-        timer = metricRegistry.timer(name("timer", path.replace("/","")));
+        timer = metricRegistry.timer(name("timer", path.split(REGEX)));
     }
 
     @Override public Object handle(final Request request, final Response response)
