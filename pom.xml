@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>spark-metrics</groupId>
     <artifactId>spark-metrics</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <dependencies>
 
@@ -106,5 +104,6 @@
         <url>git@github.com:qmetric/spark-metrics.git</url>
         <connection>scm:git:git://github.com/qmetric/spark-metrics.git</connection>
         <developerConnection>scm:git:git@github.com:qmetric/spark-metrics.git</developerConnection>
-    </scm>
+      <tag>spark-metrics-1.0</tag>
+  </scm>
 </project>
