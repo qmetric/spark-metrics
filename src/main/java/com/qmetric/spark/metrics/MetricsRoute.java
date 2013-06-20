@@ -3,7 +3,6 @@ package com.qmetric.spark.metrics;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.json.MetricsModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.eclipse.jetty.http.MimeTypes;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -20,22 +19,24 @@ public class MetricsRoute extends Route
 
     private final MetricRegistry metricRegistry;
 
+    private final ObjectMapper objectMapper;
+
     public MetricsRoute(final MetricRegistry metricRegistry)
     {
         super(PATH);
         this.metricRegistry = metricRegistry;
+        objectMapper = new ObjectMapper().registerModule(new MetricsModule(TimeUnit.SECONDS, TimeUnit.MILLISECONDS, true));
     }
 
     @Override public Object handle(final Request request, final Response response)
     {
-        final ObjectMapper objectMapper = new ObjectMapper().registerModule(new MetricsModule(TimeUnit.SECONDS, TimeUnit.MILLISECONDS, true));
 
-        response.raw().setContentType(MimeTypes.Type.TEXT_JSON.asString());
+
+        response.raw().setContentType("application/json");
         response.raw().setHeader("Cache-Control", "must-revalidate,no-cache,no-store");
         response.raw().setStatus(HttpServletResponse.SC_OK);
-        try
+        try(ServletOutputStream outputStream = response.raw().getOutputStream())
         {
-            final ServletOutputStream outputStream = response.raw().getOutputStream();
             objectMapper.writer().withDefaultPrettyPrinter().writeValue(outputStream, metricRegistry);
         }
         catch (IOException e)

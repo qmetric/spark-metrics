@@ -7,17 +7,12 @@ import org.junit.Test;
 
 import javax.sql.DataSource;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
+import static com.qmetric.spark.metrics.MockDataSource.exceptionThrowingDataSource;
+import static com.qmetric.spark.metrics.MockDataSource.failingDataSource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class DBHealthCheckTest
 {
@@ -46,9 +41,8 @@ public class DBHealthCheckTest
     @Test
     public void shouldSendSpecificMessage() throws Exception
     {
-        final String message = "Unable to connect to db";
-        final DBHealthCheck dbHealthCheck = new DBHealthCheck(failingDataSource(), new DBHealthCheck.HealthCheckQuery("SELECT 1 FROM INFORMATION_SCHEMA"), new DBHealthCheck.UnHealthyMessage(
-                message));
+        final String message = "Unable to connect to database : url";
+        final DBHealthCheck dbHealthCheck = new DBHealthCheck(failingDataSource(), new DBHealthCheck.HealthCheckQuery("SELECT 1 FROM INFORMATION_SCHEMA"));
 
         final HealthCheck.Result check = dbHealthCheck.check();
 
@@ -59,21 +53,12 @@ public class DBHealthCheckTest
     @Test
     public void shouldCatchExceptionAndSendMessage() throws Exception
     {
-        final DBHealthCheck dbHealthCheck = new DBHealthCheck(null);
+        final DataSource ds = exceptionThrowingDataSource();
+        final DBHealthCheck dbHealthCheck = new DBHealthCheck(ds);
 
         final HealthCheck.Result check = dbHealthCheck.check();
 
-        assertThat(check.getError(),  is(instanceOf(NullPointerException.class)));
-    }
-
-    private DataSource failingDataSource() throws SQLException
-    {
-        DataSource ds = mock(DataSource.class);
-        final Connection connection = mock(Connection.class);
-        when(ds.getConnection()).thenReturn(connection);
-        final Statement statement = mock(Statement.class);
-        when(connection.createStatement()).thenReturn(statement);
-        when(statement.execute(anyString())).thenReturn(false);
-        return ds;
+        assertThat(check.isHealthy(), is(false));
+        assertThat(check.getError(),  is(instanceOf(Exception.class)));
     }
 }

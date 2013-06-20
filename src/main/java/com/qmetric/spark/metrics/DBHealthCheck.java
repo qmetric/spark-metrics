@@ -1,49 +1,54 @@
 package com.qmetric.spark.metrics;
 
 import com.codahale.metrics.health.HealthCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import static com.qmetric.spark.metrics.DBHealthCheck.HealthCheckQuery.MYSQL_HEALTH_CHECK_QUERY;
 
 public class DBHealthCheck extends HealthCheck
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger(DBHealthCheck.class);
     private final DataSource dataSource;
 
     private final UnHealthyMessage unHealthyMessage;
 
     private final HealthCheckQuery healthCheckQuery;
 
+    private String url;
+
     public DBHealthCheck(final DataSource dataSource)
     {
         this.dataSource = dataSource;
+        setUrl();
         healthCheckQuery = MYSQL_HEALTH_CHECK_QUERY;
-        unHealthyMessage = new UnHealthyMessage();
+        unHealthyMessage = new UnHealthyMessage(url);
+    }
+
+    private void setUrl()
+    {
+        try
+        {
+            url = dataSource.getConnection().getMetaData().getURL();
+        }
+        catch (SQLException e)
+        {
+            LOGGER.error("Unable to get db Url");
+        }
     }
 
     public DBHealthCheck(final DataSource dataSource, final HealthCheckQuery healthCheckQuery)
     {
         this.dataSource = dataSource;
+        setUrl();
         this.healthCheckQuery = healthCheckQuery;
-        unHealthyMessage = new UnHealthyMessage();
-    }
-
-    public DBHealthCheck(final DataSource dataSource, final UnHealthyMessage unHealthyMessage)
-    {
-        healthCheckQuery = MYSQL_HEALTH_CHECK_QUERY;
-        this.dataSource = dataSource;
-        this.unHealthyMessage = unHealthyMessage;
-    }
-
-    public DBHealthCheck(final DataSource dataSource, final HealthCheckQuery healthCheckQuery, final UnHealthyMessage unHealthyMessage)
-    {
-
-        this.dataSource = dataSource;
-        this.healthCheckQuery = healthCheckQuery;
-        this.unHealthyMessage = unHealthyMessage;
+        unHealthyMessage = new UnHealthyMessage(url);
     }
 
     @Override protected Result check() throws Exception
@@ -85,15 +90,11 @@ public class DBHealthCheck extends HealthCheck
 
     static class UnHealthyMessage
     {
-        public String message = "Unable to connect to database";
+        public final String message;
 
-        public UnHealthyMessage()
+        public UnHealthyMessage(final String url)
         {
-        }
-
-        public UnHealthyMessage(final String message)
-        {
-            this.message = message;
+            message = String.format("Unable to connect to database : %s", url);
         }
     }
 }
