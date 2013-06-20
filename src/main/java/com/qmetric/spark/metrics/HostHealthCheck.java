@@ -18,35 +18,38 @@ public class HostHealthCheck extends HealthCheck
 
     public HostHealthCheck(final String host)
     {
-        addr = String.format("http://%s/ping", host);
+        addr = makeUrl(host);
         unhealthyMessage = String.format("Unable to Connect to host %s", host);
         resty = new Resty();
     }
 
     public HostHealthCheck(final String host, final String context)
     {
-        addr = String.format("http://%s/%s/ping", host, context);
+        addr = makeUrl(host, context);
         unhealthyMessage = String.format("Unable to Connect to host %s", host);
         resty = new Resty();
     }
 
     @Override protected Result check() throws Exception
     {
-        try
+        final TextResource text = resty.text(addr);
+        if (pattern.matcher(text.toString()).find())
         {
-            final TextResource text = resty.text(addr);
-            if (pattern.matcher(text.toString()).find())
-            {
-                return Result.healthy();
-            }
-            else
-            {
-                return Result.unhealthy(unhealthyMessage);
-            }
+            return Result.healthy();
         }
-        catch (Exception e)
+        else
         {
-            return Result.unhealthy(e);
+            return Result.unhealthy(unhealthyMessage);
         }
+    }
+
+    private String makeUrl(final String host)
+    {
+        return host.contains("http") ? String.format("%s/ping", host) : String.format("http://%s/ping", host);
+    }
+
+    private String makeUrl(final String host, final String context)
+    {
+        return host.contains("http") ? String.format("%s/%s/ping", host, context) : String.format("http://%s/%s/ping", host, context);
     }
 }

@@ -8,8 +8,9 @@ import spark.Spark;
 
 import static com.qmetric.spark.metrics.SparkConstants.PORT;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({DBHealthCheckTest.class, HealthCheckRouteTest.class, MeterFiltersTest.class, MetricsRouteTest.class, PingRouteTest.class, RouteMeterWrapperTest.class, RouteTimerWrapperTest.class, ServerHealthCheckTest.class, TimerFiltersTest.class})
+@RunWith(Suite.class) @Suite.SuiteClasses(
+        {DBHealthCheckTest.class, HealthCheckRouteTest.class, MeterFiltersTest.class, MetricsRouteTest.class, PingRouteTest.class, RouteMeterWrapperTest.class,
+         RouteTimerWrapperTest.class, ServerHealthCheckTest.class, TimerFiltersTest.class, HostHealthCheckTest.class})
 public class StartSparkServer
 {
     @ClassRule

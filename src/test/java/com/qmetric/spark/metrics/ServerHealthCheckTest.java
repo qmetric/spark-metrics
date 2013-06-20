@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ServerHealthCheckTest
@@ -63,16 +62,6 @@ public class ServerHealthCheckTest
     {
         final HostHealthCheck hostHealthCheck = new HostHealthCheck("localhost:47563", "app-context");
         assertHostIsHealthy(hostHealthCheck);
-    }
-
-    @Test
-    public void willFailIfCannotConnectToServer() throws Exception
-    {
-        final HostHealthCheck hostHealthCheck = new HostHealthCheck("localhost:47564");
-        final HealthCheck.Result check = hostHealthCheck.check();
-        assertThat(check.isHealthy(), is(false));
-        assertThat(check.getMessage(), notNullValue());
-        assertThat(check.getError(), notNullValue());
     }
 
     @AfterClass
