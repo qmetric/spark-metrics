@@ -15,7 +15,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class MetricSetUpTest
+public class MetricSetupTest
 {
     private static final String TIMER_TIMED = "timer.timed";
 
@@ -39,7 +39,7 @@ public class MetricSetUpTest
     public void shouldAddTimedRoute() throws IOException
     {
         final String timed = "/timed";
-        MetricSetUp.timeRoute(timed, route(timed), MetricSetUp.Verb.GET);
+        MetricSetup.timeRoute(timed, route(timed), MetricSetup.Verb.GET);
 
         requestTestRoute(timed);
 
@@ -52,7 +52,7 @@ public class MetricSetUpTest
     public void shouldAddMeterRoute() throws IOException
     {
         final String metered = "/metered";
-        MetricSetUp.meterRoute(metered, route(metered), MetricSetUp.Verb.GET);
+        MetricSetup.meterRoute(metered, route(metered), MetricSetup.Verb.GET);
 
         requestTestRoute(metered);
 
@@ -65,7 +65,7 @@ public class MetricSetUpTest
     public void shouldTimeAndMeterRoute() throws IOException
     {
         final String timedAndMetered = "/timedAndMetered";
-        MetricSetUp.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetUp.Verb.GET);
+        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetup.Verb.GET);
 
         requestTestRoute(timedAndMetered);
 

@@ -4,7 +4,7 @@ import com.codahale.metrics.MetricRegistry;
 import spark.Route;
 import spark.Spark;
 
-public class MetricSetUp
+public class MetricSetup
 {
     public enum Verb
     {
