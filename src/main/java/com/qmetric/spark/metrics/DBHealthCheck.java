@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -23,32 +24,22 @@ public class DBHealthCheck extends HealthCheck
 
     private String url;
 
-    public DBHealthCheck(final DataSource dataSource)
+    private String userName;
+
+    public DBHealthCheck(final DataSource dataSource) throws SQLException
     {
         this.dataSource = dataSource;
-        setUrl();
+        setDBConnectionInfo();
         healthCheckQuery = MYSQL_HEALTH_CHECK_QUERY;
-        unHealthyMessage = new UnHealthyMessage(url);
+        unHealthyMessage = new UnHealthyMessage(url, userName);
     }
 
-    private void setUrl()
-    {
-        try
-        {
-            url = dataSource.getConnection().getMetaData().getURL();
-        }
-        catch (SQLException e)
-        {
-            LOGGER.error("Unable to get db Url");
-        }
-    }
-
-    public DBHealthCheck(final DataSource dataSource, final HealthCheckQuery healthCheckQuery)
+    public DBHealthCheck(final DataSource dataSource, final HealthCheckQuery healthCheckQuery) throws SQLException
     {
         this.dataSource = dataSource;
-        setUrl();
+        setDBConnectionInfo();
         this.healthCheckQuery = healthCheckQuery;
-        unHealthyMessage = new UnHealthyMessage(url);
+        unHealthyMessage = new UnHealthyMessage(url, userName);
     }
 
     @Override protected Result check() throws Exception
@@ -72,7 +63,21 @@ public class DBHealthCheck extends HealthCheck
         }
         catch (Exception e)
         {
-            return Result.unhealthy(e);
+            return HostHealthCheck.error(e, unHealthyMessage.message);
+        }
+    }
+
+    private void setDBConnectionInfo()
+    {
+        try
+        {
+            final DatabaseMetaData metaData = dataSource.getConnection().getMetaData();
+            url = metaData.getURL();
+            userName = metaData.getUserName();
+        }
+        catch (SQLException e)
+        {
+            LOGGER.error("Unable to get db Url");
         }
     }
 
@@ -92,9 +97,9 @@ public class DBHealthCheck extends HealthCheck
     {
         public final String message;
 
-        public UnHealthyMessage(final String url)
+        public UnHealthyMessage(final String url, final String userName) throws SQLException
         {
-            message = String.format("Unable to connect to database : %s", url);
+            message = String.format("Unable to connect to database : %s username %s", url, userName);
         }
     }
 }

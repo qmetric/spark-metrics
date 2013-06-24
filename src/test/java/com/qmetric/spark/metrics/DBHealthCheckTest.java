@@ -41,7 +41,7 @@ public class DBHealthCheckTest
     @Test
     public void shouldSendSpecificMessage() throws Exception
     {
-        final String message = "Unable to connect to database : url";
+        final String message = "Unable to connect to database : url username null";
         final DBHealthCheck dbHealthCheck = new DBHealthCheck(failingDataSource(), new DBHealthCheck.HealthCheckQuery("SELECT 1 FROM INFORMATION_SCHEMA"));
 
         final HealthCheck.Result check = dbHealthCheck.check();
@@ -59,6 +59,7 @@ public class DBHealthCheckTest
         final HealthCheck.Result check = dbHealthCheck.check();
 
         assertThat(check.isHealthy(), is(false));
-        assertThat(check.getError(),  is(instanceOf(Exception.class)));
+        assertThat(check.getMessage(), equalTo("Unable to connect to database : url username null"));
+        assertThat(check.getError(), instanceOf(Exception.class));
     }
 }

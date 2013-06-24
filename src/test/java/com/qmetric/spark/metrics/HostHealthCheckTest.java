@@ -3,6 +3,7 @@ package com.qmetric.spark.metrics;
 import com.codahale.metrics.health.HealthCheck;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -27,5 +28,17 @@ public class HostHealthCheckTest
         final HealthCheck.Result check = hostHealthCheck.check();
 
         assertThat(check.isHealthy(), is(true));
+    }
+
+    @Test
+    public void shouldHandleException() throws Exception
+    {
+        final String unknownUrl = "UnknownUrl";
+        final HostHealthCheck hostHealthCheck = new HostHealthCheck(unknownUrl);
+
+        final HealthCheck.Result check = hostHealthCheck.check();
+
+        assertThat(check.isHealthy(), is(false));
+        assertThat(check.getMessage(), containsString(unknownUrl));
     }
 }

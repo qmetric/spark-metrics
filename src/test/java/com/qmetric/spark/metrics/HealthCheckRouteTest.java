@@ -16,6 +16,7 @@ import java.sql.SQLException;
 
 import static com.qmetric.spark.metrics.MockDataSource.failingDataSource;
 import static com.qmetric.spark.metrics.SparkConstants.PORT;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HealthCheckRouteTest
@@ -46,15 +47,16 @@ public class HealthCheckRouteTest
         assertThat(writer.toString(), SameJSONAs.sameJSONAs("{\n" +
                                                             "  \"db\" : {\n" +
                                                             "    \"healthy\" : false,\n" +
-                                                            "    \"message\" : \"Unable to connect to database : url\"\n" +
+                                                            "    \"message\" : \"Unable to connect to database : url username null\"\n" +
                                                             "  },\n" +
                                                             "  \"host\" : {\n" +
                                                             "    \"healthy\" : false,\n" +
-                                                            "    \"message\" : \"Stream closed\",\n" +
+                                                            "    \"message\" : \"Unable to Connect to host http://host/ping\",\n" +
                                                             "    \"error\" : {\n" +
                                                             "      \"message\" : \"Stream closed\",\n" +
                                                             "    }\n" +
                                                             "  }\n" +
-                                                            "}\n").allowingExtraUnexpectedFields());
+                                                            "}").allowingExtraUnexpectedFields());
+        assertThat(writer.toString(), containsString("stack\" : ["));
     }
 }
