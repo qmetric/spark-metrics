@@ -11,7 +11,6 @@ import spark.Route;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.OutputStream;
-import java.util.Map;
 import java.util.SortedMap;
 
 public class HealthCheckRoute extends Route
@@ -43,16 +42,9 @@ public class HealthCheckRoute extends Route
         }
         else
         {
-            if (isAllHealthy(results))
-            {
-                resp.setStatus(HttpServletResponse.SC_OK);
-            }
-            else
-            {
-                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
+            resp.setStatus(HttpServletResponse.SC_OK);
         }
-        try(OutputStream output = resp.getOutputStream())
+        try (OutputStream output = resp.getOutputStream())
         {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(output, results);
         }
@@ -66,17 +58,5 @@ public class HealthCheckRoute extends Route
     private SortedMap<String, HealthCheck.Result> runHealthChecks()
     {
         return registry.runHealthChecks();
-    }
-
-    private static boolean isAllHealthy(Map<String, HealthCheck.Result> results)
-    {
-        for (HealthCheck.Result result : results.values())
-        {
-            if (!result.isHealthy())
-            {
-                return false;
-            }
-        }
-        return true;
     }
 }

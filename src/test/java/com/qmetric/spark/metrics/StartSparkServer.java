@@ -8,9 +8,22 @@ import spark.Spark;
 
 import static com.qmetric.spark.metrics.SparkConstants.PORT;
 
-@RunWith(Suite.class) @Suite.SuiteClasses(
-        {DBHealthCheckTest.class, HealthCheckRouteTest.class, MeterFiltersTest.class, MetricsRouteTest.class, PingRouteTest.class, RouteMeterWrapperTest.class,
-         RouteTimerWrapperTest.class, ServerHealthCheckTest.class, TimerFiltersTest.class, HostHealthCheckTest.class, CustomHealthCheckTest.class})
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+                     DBHealthCheckTest.class, //
+                     MeterFiltersTest.class, //
+                     MetricsRouteTest.class, //
+                     PingRouteTest.class, //
+                     RouteMeterWrapperTest.class, //
+                     RouteTimerWrapperTest.class, //
+                     ServerHealthCheckTest.class, //
+                     TimerFiltersTest.class, //
+                     HostHealthCheckTest.class, //
+                     CustomHealthCheckTest.class, //
+                     HealthCheckSetupTest.class, //
+                     MetricSetUpTest.class,  //
+                     ResultModifierTest.class  //
+                    })
 public class StartSparkServer
 {
     @ClassRule
@@ -20,6 +33,10 @@ public class StartSparkServer
         {
             super.before();
             Spark.setPort(PORT);
+            HealthCheckSetup.registerRoute();
+            MetricSetUp.registerRoute();
+            MetricSetUp.timeAndMeterRoute("/ping", new PingRoute(), MetricSetUp.Verb.GET);
+            Thread.sleep(500);
         }
 
         @Override protected void after()

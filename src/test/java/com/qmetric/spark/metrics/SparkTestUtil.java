@@ -15,7 +15,6 @@ import static com.qmetric.spark.metrics.SparkConstants.PORT;
 
 class SparkTestUtil
 {
-
     private final DefaultHttpClient httpClient;
 
     private static final String URL_TEMPLATE = "http://localhost:%d/%s";
@@ -23,10 +22,10 @@ class SparkTestUtil
     public SparkTestUtil(final int port)
     {
         Scheme http = new Scheme("http", port, PlainSocketFactory.getSocketFactory());
-        SchemeRegistry sr = new SchemeRegistry();
-        sr.register(http);
-        ClientConnectionManager connMrg = new BasicClientConnectionManager(sr);
-        httpClient = new DefaultHttpClient(connMrg);
+        SchemeRegistry schemeRegistry = new SchemeRegistry();
+        schemeRegistry.register(http);
+        ClientConnectionManager connectionManager = new BasicClientConnectionManager(schemeRegistry);
+        httpClient = new DefaultHttpClient(connectionManager);
     }
 
     public HttpResponse get(final String s)
