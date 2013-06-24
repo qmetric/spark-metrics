@@ -21,7 +21,7 @@ import static com.qmetric.spark.metrics.SparkConstants.PORT;
                      HostHealthCheckTest.class, //
                      CustomHealthCheckTest.class, //
                      HealthCheckSetupTest.class, //
-                     MetricSetUpTest.class,  //
+                     MetricSetupTest.class,  //
                      ResultModifierTest.class  //
                     })
 public class StartSparkServer
@@ -34,8 +34,8 @@ public class StartSparkServer
             super.before();
             Spark.setPort(PORT);
             HealthCheckSetup.registerRoute();
-            MetricSetUp.registerRoute();
-            MetricSetUp.timeAndMeterRoute("/ping", new PingRoute(), MetricSetUp.Verb.GET);
+            MetricSetup.registerRoute();
+            MetricSetup.timeAndMeterRoute("/ping", new PingRoute(), MetricSetup.Verb.GET);
             Thread.sleep(500);
         }
 
