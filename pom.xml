@@ -108,6 +108,7 @@
             <name>qmetric-snapshot</name>
             <url>https://ci.qmetric.co.uk/nexus/content/repositories/qmetric-snapshots</url>
         </snapshotRepository>
+
         <repository>
             <id>nexus</id>
             <name>qmetric-releases</name>
