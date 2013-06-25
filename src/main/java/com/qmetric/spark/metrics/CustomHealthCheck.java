@@ -9,21 +9,32 @@ public class CustomHealthCheck extends HealthCheck
 {
     private final URL url;
 
+    private String message;
+
     public CustomHealthCheck(final URL url)
     {
         this.url = url;
+        message = String.format(HostHealthCheck.UNABLE_TO_CONNECT_TO_HOST_S, url.toString());
     }
 
     @Override protected Result check() throws Exception
     {
-        final boolean status = new Resty().text(url.toURI()).status(200);
-        if(status)
+        try
         {
-            return Result.healthy();
+            final boolean status = new Resty().text(url.toURI()).status(200);
+            if (status)
+            {
+                return Result.healthy();
+            }
+            else
+            {
+
+                return Result.unhealthy(message);
+            }
         }
-        else
+        catch (Exception e)
         {
-            return Result.unhealthy(String.format("Cannot connect to : %s", url));
+            return HostHealthCheck.error(e, message);
         }
     }
 }

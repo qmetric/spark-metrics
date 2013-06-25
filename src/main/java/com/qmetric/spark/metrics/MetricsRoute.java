@@ -30,12 +30,10 @@ public class MetricsRoute extends Route
 
     @Override public Object handle(final Request request, final Response response)
     {
-
-
         response.raw().setContentType("application/json");
         response.raw().setHeader("Cache-Control", "must-revalidate,no-cache,no-store");
         response.raw().setStatus(HttpServletResponse.SC_OK);
-        try(ServletOutputStream outputStream = response.raw().getOutputStream())
+        try (ServletOutputStream outputStream = response.raw().getOutputStream())
         {
             objectMapper.writer().withDefaultPrettyPrinter().writeValue(outputStream, metricRegistry);
         }

@@ -35,6 +35,8 @@ public class MetricsRouteTest
     @Test
     public void shouldShowMetrics() throws IOException
     {
+        final HttpResponse httpResponse = sparkTestUtil.get("ping");
+        EntityUtils.consumeQuietly(httpResponse.getEntity());
         final HttpResponse metrics = sparkTestUtil.get(MetricsRoute.PATH);
 
         final StringWriter writer = new StringWriter();

@@ -1,9 +1,7 @@
 package com.qmetric.spark.metrics;
 
 import org.apache.http.HttpResponse;
-import org.junit.Before;
 import org.junit.Test;
-import spark.Spark;
 import spark.utils.IOUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,19 +15,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PingRouteTest
 {
-    private SparkTestUtil sparkTestUtil;
-
-    @Before
-    public void init()
-    {
-        Spark.get(new PingRoute());
-
-        sparkTestUtil = new SparkTestUtil(PORT);
-    }
-
     @Test
     public void shouldPing() throws IOException
     {
+        final SparkTestUtil sparkTestUtil = new SparkTestUtil(PORT);
         final HttpResponse httpResponse = sparkTestUtil.get("ping");
 
         final StringWriter writer = new StringWriter();
