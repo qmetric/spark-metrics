@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
-    <groupId>spark-metrics</groupId>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.qmetric</groupId>
     <artifactId>spark-metrics</artifactId>
     <version>1.4-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Spark Metrics</name>
+    <description>A library of Route decorators to add metrics to spark based applications and Routes to access the metrics</description>
+    <url>http://qmetric.co.uk/</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+    </developers>
+    <scm>
+        <url>git@github.com:qmetric/spark-metrics.git</url>
+        <connection>scm:git:git://github.com/qmetric/spark-metrics.git</connection>
+        <developerConnection>scm:git:git@github.com:qmetric/spark-metrics.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
-
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
@@ -133,11 +156,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <scm>
-        <url>git@github.com:qmetric/spark-metrics.git</url>
-        <connection>scm:git:git://github.com/qmetric/spark-metrics.git</connection>
-        <developerConnection>scm:git:git@github.com:qmetric/spark-metrics.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
 </project>
