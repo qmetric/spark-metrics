@@ -42,10 +42,10 @@ get(new HealthCheckRoute(healthCheckRegistry));
 HealthCheckSetup.addHealthCheck("external-service", externalServiceUrl);
 MetricSetup.timeAndMeterRoute(path, makeRoute(path), MetricSetup.Verb.POST);
 ```
-This code will initialise a health check
-It will decorate a route
-Add both routes to spark
-And add the metrics endpoint and the healthcheck endpoint to spark
+This code will initialise a health check  
+It will decorate a route  
+Add both routes to spark  
+And add the metrics endpoint and the healthcheck endpoint to spark  
 
 
 ####Licence
