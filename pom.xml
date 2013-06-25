@@ -174,7 +174,15 @@
                 <configuration>
                     <source>1.7</source>
                     <targetBytecode>1.7</targetBytecode>
-                    <providerSelection>1.8</providerSelection>
+                    <providerSelection>1.7</providerSelection>
+                    <sources>
+                        <fileset>
+                            <directory>${pom.basedir}/src/main/groovy</directory>
+                            <includes>
+                                <include>**/*.groovy</include>
+                            </includes>
+                        </fileset>
+                    </sources>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -193,48 +201,8 @@
                         <artifactId>groovy-all</artifactId>
                         <version>1.8.7</version>
                     </dependency>
-                    <!--<dependency>-->
-                        <!--<groupId>org.fusesource.jansi</groupId>-->
-                        <!--<artifactId>jansi</artifactId>-->
-                        <!--<version>1.9</version>-->
-                    <!--</dependency>-->
                 </dependencies>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.gmaven</groupId>-->
-                <!--<artifactId>gmaven-plugin</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<goals>-->
-                            <!--<goal>generateStubs</goal>-->
-                            <!--<goal>compile</goal>-->
-                            <!--<goal>generateTestStubs</goal>-->
-                            <!--<goal>testCompile</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.gmaven</groupId>-->
-                <!--<artifactId>gmaven-plugin</artifactId>-->
-                <!--<version>1.5</version>-->
-                <!--<configuration>-->
-                    <!--<providerSelection>2.0</providerSelection>-->
-                    <!--<source />-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<goals>-->
-                            <!--<goal>generateStubs</goal>-->
-                            <!--<goal>compile</goal>-->
-                            <!--<goal>generateTestStubs</goal>-->
-                            <!--<goal>testCompile</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 
