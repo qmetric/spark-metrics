@@ -4,7 +4,7 @@
 
     <groupId>spark-metrics</groupId>
     <artifactId>spark-metrics</artifactId>
-    <version>1.5</version>
+    <version>1.6-SNAPSHOT</version>
 
     <dependencies>
 
@@ -169,6 +169,6 @@
         <url>git@github.com:qmetric/spark-metrics.git</url>
         <connection>scm:git:git://github.com/qmetric/spark-metrics.git</connection>
         <developerConnection>scm:git:git@github.com:qmetric/spark-metrics.git</developerConnection>
-      <tag>spark-metrics-1.5</tag>
+      <tag>HEAD</tag>
   </scm>
 </project>
