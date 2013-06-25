@@ -4,7 +4,7 @@
 
     <groupId>spark-metrics</groupId>
     <artifactId>spark-metrics</artifactId>
-    <version>1.4</version>
+    <version>1.6-SNAPSHOT</version>
 
     <dependencies>
 
