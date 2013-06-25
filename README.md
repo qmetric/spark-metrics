@@ -13,7 +13,7 @@ get(new PingRoute());
 ```
 ####Decorate Route
 ```
-final String path = "/quote-engine/home/renewal";
+final String path = "/path";
 post(new RouteMeterWrapper(path, metricRegistry, new RouteTimerWrapper(path, metricRegistry, new MyRoute(path))));
 ```
 
@@ -27,7 +27,7 @@ get(new MetricsRoute(metricRegistry));
 ####Add a health check
 ```
 HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
-healthCheckRegistry.register("postcode-service", new HostHealthCheck(postcodeServiceUrl));
+healthCheckRegistry.register("external-service", new HostHealthCheck(externalServiceUrl));
 ```
 
 ####Add endpoint for health check
@@ -62,3 +62,5 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+
