@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -10,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.qmetric</groupId>
     <artifactId>spark-metrics</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>1.7</version>
     <packaging>jar</packaging>
     <name>Spark Metrics</name>
     <description>A library of Route decorators to add metrics to spark based applications and Routes to access the metrics</description>
@@ -28,7 +27,7 @@
         <url>git@github.com:qmetric/spark-metrics.git</url>
         <connection>scm:git:git://github.com/qmetric/spark-metrics.git</connection>
         <developerConnection>scm:git:git@github.com:qmetric/spark-metrics.git</developerConnection>
-        <tag>spark-metrics-1.4</tag>
+        <tag>spark-metrics-1.7</tag>
     </scm>
 
     <dependencies>
@@ -168,7 +167,7 @@
                 <version>1.5</version>
                 <configuration>
                     <providerSelection>2.0</providerSelection>
-                    <source/>
+                    <source />
                 </configuration>
                 <executions>
                     <execution>
