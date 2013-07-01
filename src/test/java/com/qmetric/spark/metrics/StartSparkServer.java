@@ -21,8 +21,7 @@ import static com.qmetric.spark.metrics.SparkConstants.PORT;
                      HostHealthCheckTest.class, //
                      CustomHealthCheckTest.class, //
                      HealthCheckSetupTest.class, //
-                     MetricSetupTest.class,  //
-                     ResultModifierTest.class  //
+                     MetricSetupTest.class  //
                     })
 public class StartSparkServer
 {

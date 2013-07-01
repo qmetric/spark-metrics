@@ -113,13 +113,9 @@ public class HealthCheckSetupTest
                                                  "  },\n" +
                                                  "  \"failing-host\" : {\n" +
                                                  "    \"healthy\" : false,\n" +
-                                                 "    \"message\" : \"Unable to Connect to host http://host/ping\",\n" +
-                                                 "    \"error\" : {\n" +
-                                                 "      \"message\" : \"Stream closed\",\n" +
-                                                 "    }\n" +
+                                                 "    \"message\" : \"Unable to Connect to host http://host/ping\"\n" +
                                                  "  }\n" +
                                                  "}").allowingExtraUnexpectedFields());
-        assertThat(actual, containsString("stack\" : ["));
     }
 
     private HttpResponse getHealthCheckResponse()

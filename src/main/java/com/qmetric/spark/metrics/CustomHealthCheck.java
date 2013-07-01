@@ -34,7 +34,7 @@ public class CustomHealthCheck extends HealthCheck
         }
         catch (Exception e)
         {
-            return HostHealthCheck.error(e, message);
+            return Result.unhealthy(message);
         }
     }
 }

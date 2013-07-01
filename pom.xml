@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
     <name>Spark Metrics</name>
     <description>A library of Route decorators to add metrics to spark based applications and Routes to access the metrics</description>
-    <url>http://qmetric.co.uk/</url>
+    <url>https://github.com/qmetric/spark-metrics</url>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>0.9.9.7</version>
+            <version>1.0</version>
         </dependency>
 
         <dependency>
@@ -53,18 +53,6 @@
             <groupId>us.monoid.web</groupId>
             <artifactId>resty</artifactId>
             <version>0.3.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.gmaven.runtime</groupId>
-            <artifactId>gmaven-runtime-2.0</artifactId>
-            <version>1.5</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -125,21 +113,8 @@
 
     </dependencies>
 
-    <distributionManagement>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Nexus Staging Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.4.1</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -160,25 +135,6 @@
                     <parallel>methods</parallel>
                     <threadCount>10</threadCount>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.5</version>
-                <configuration>
-                    <providerSelection>2.0</providerSelection>
-                    <source />
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generateStubs</goal>
-                            <goal>compile</goal>
-                            <goal>generateTestStubs</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

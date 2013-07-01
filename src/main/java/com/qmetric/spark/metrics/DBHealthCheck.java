@@ -63,7 +63,7 @@ public class DBHealthCheck extends HealthCheck
         }
         catch (Exception e)
         {
-            return HostHealthCheck.error(e, unHealthyMessage.message);
+            return Result.unhealthy(unHealthyMessage.message);
         }
     }
 

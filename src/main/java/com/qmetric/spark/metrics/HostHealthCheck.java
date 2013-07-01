@@ -1,7 +1,6 @@
 package com.qmetric.spark.metrics;
 
 import com.codahale.metrics.health.HealthCheck;
-import us.monoid.json.JSONException;
 import us.monoid.web.Resty;
 import us.monoid.web.TextResource;
 
@@ -45,7 +44,7 @@ public class HostHealthCheck extends HealthCheck
         }
         catch (Exception e)
         {
-            return error(e, unhealthyMessage);
+            return Result.unhealthy(unhealthyMessage);
         }
     }
 
@@ -57,10 +56,5 @@ public class HostHealthCheck extends HealthCheck
     private String makeUrl(final String host, final String context)
     {
         return host.contains("http") ? String.format("%s/%s/ping", host, context) : String.format("http://%s/%s/ping", host, context);
-    }
-
-    public static Result error(final Exception e, final String unhealthyMessage) throws JSONException
-    {
-        return ResultModifier.newResult(false, unhealthyMessage, e);
     }
 }
