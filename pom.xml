@@ -40,13 +40,13 @@
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-core</artifactId>
-            <version>3.0.0-RC1</version>
+            <version>3.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-servlets</artifactId>
-            <version>3.0.0-RC1</version>
+            <version>3.0.0</version>
         </dependency>
 
         <dependency>
