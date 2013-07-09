@@ -20,6 +20,8 @@ public class DBHealthCheck extends HealthCheck
 
     private final UnHealthyMessage unHealthyMessage;
 
+    private final HealthyMessage healthyMessage;
+
     private final HealthCheckQuery healthCheckQuery;
 
     private String url;
@@ -32,6 +34,7 @@ public class DBHealthCheck extends HealthCheck
         setDBConnectionInfo();
         healthCheckQuery = MYSQL_HEALTH_CHECK_QUERY;
         unHealthyMessage = new UnHealthyMessage(url, userName);
+        healthyMessage = new HealthyMessage(url, userName);
     }
 
     public DBHealthCheck(final DataSource dataSource, final HealthCheckQuery healthCheckQuery) throws SQLException
@@ -40,6 +43,7 @@ public class DBHealthCheck extends HealthCheck
         setDBConnectionInfo();
         this.healthCheckQuery = healthCheckQuery;
         unHealthyMessage = new UnHealthyMessage(url, userName);
+        healthyMessage = new HealthyMessage(url, userName);
     }
 
     @Override protected Result check() throws Exception
@@ -54,7 +58,7 @@ public class DBHealthCheck extends HealthCheck
 
             if (execute)
             {
-                return Result.healthy();
+                return Result.healthy(healthyMessage.message);
             }
             else
             {
@@ -101,5 +105,16 @@ public class DBHealthCheck extends HealthCheck
         {
             message = String.format("Unable to connect to database : %s username %s", url, userName);
         }
+    }
+
+    static class HealthyMessage
+    {
+        public final String message;
+
+        public HealthyMessage(final String url, final String userName) throws SQLException
+        {
+            message = String.format("Connection to database successful Host: %s username %s", url, userName);
+        }
+
     }
 }

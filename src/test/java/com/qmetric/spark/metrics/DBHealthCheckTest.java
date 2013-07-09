@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import static com.qmetric.spark.metrics.MockDataSource.exceptionThrowingDataSource;
 import static com.qmetric.spark.metrics.MockDataSource.failingDataSource;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,6 +36,7 @@ public class DBHealthCheckTest
         final HealthCheck.Result check = dbHealthCheck.check();
 
         assertThat(check.isHealthy(), is(true));
+        assertThat(check.getMessage(), containsString("Connection to database successful Host: jdbc:hsqldb:mem:dbhc"));
     }
 
     @Test
@@ -60,4 +62,5 @@ public class DBHealthCheckTest
         assertThat(check.isHealthy(), is(false));
         assertThat(check.getMessage(), equalTo("Unable to connect to database : url username null"));
     }
+
 }
