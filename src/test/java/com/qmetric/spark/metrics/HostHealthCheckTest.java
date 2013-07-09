@@ -31,6 +31,17 @@ public class HostHealthCheckTest
     }
 
     @Test
+    public void shouldIncludeHostDetailsInMessage() throws Exception
+    {
+        final HostHealthCheck hostHealthCheck = new HostHealthCheck("http://localhost:" + SparkConstants.PORT);
+
+        final HealthCheck.Result check = hostHealthCheck.check();
+
+        assertThat(check.getMessage(), containsString("Ping was successful to http://localhost:"));
+
+    }
+
+    @Test
     public void shouldHandleException() throws Exception
     {
         final String unknownUrl = "UnknownUrl";

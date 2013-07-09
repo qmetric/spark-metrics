@@ -10,22 +10,28 @@ public class HostHealthCheck extends HealthCheck
 {
     static final String UNABLE_TO_CONNECT_TO_HOST_S = "Unable to Connect to host %s";
 
+    static final String PING_SUCCESSFUL = "Ping was successful to %s";
+
+    private static Pattern pattern = Pattern.compile("pong");
+
     private final String addr;
 
     private final String unhealthyMessage;
 
-    private static Pattern pattern = Pattern.compile("pong");
+    private final String healthyMessage;
 
     public HostHealthCheck(final String host)
     {
         addr = makeUrl(host);
         unhealthyMessage = String.format(UNABLE_TO_CONNECT_TO_HOST_S, addr);
+        healthyMessage = String.format(PING_SUCCESSFUL, addr);
     }
 
     public HostHealthCheck(final String host, final String context)
     {
         addr = makeUrl(host, context);
         unhealthyMessage = String.format(UNABLE_TO_CONNECT_TO_HOST_S, addr);
+        healthyMessage = String.format(PING_SUCCESSFUL, addr);
     }
 
     @Override protected Result check() throws Exception
@@ -35,7 +41,7 @@ public class HostHealthCheck extends HealthCheck
             final TextResource text = new Resty().text(addr);
             if (pattern.matcher(text.toString()).find())
             {
-                return Result.healthy();
+                return Result.healthy(healthyMessage);
             }
             else
             {

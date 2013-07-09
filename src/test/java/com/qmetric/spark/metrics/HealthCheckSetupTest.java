@@ -98,6 +98,17 @@ public class HealthCheckSetupTest
     }
 
     @Test
+    public void shouldReturnInternalErrorIfUnhealthy() throws Exception
+    {
+        HealthCheckSetup.addHealthCheck("failing-host", "host");
+
+        final HttpResponse healthCheck = sparkTestUtil.get(HealthCheckRoute.PATH);
+
+        assertThat(healthCheck.getStatusLine().getStatusCode(), is(500));
+
+    }
+
+    @Test
     public void shouldShowHealthChecks() throws SQLException, IOException
     {
         HealthCheckSetup.addHealthCheck("failing-host", "host");
