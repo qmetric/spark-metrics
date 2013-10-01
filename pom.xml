@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
         <dependency>
@@ -150,4 +150,17 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>qmetric-snapshot</name>
+            <url>https://ci.qmetric.co.uk/nexus/content/repositories/qmetric-snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus</id>
+            <name>qmetric-releases</name>
+            <url>https://ci.qmetric.co.uk/nexus/content/repositories/qmetric-releases</url>
+        </repository>
+    </distributionManagement>
 </project>

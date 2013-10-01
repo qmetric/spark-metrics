@@ -21,6 +21,12 @@ public class MetricSetupTest
 
     private static final String METER_METERED = "meter.metered";
 
+    private static final String TIMER = "timer.";
+
+    private static final String METER = "meter.";
+
+    private static final String SLASH = "/";
+
     private SparkTestUtil sparkTestUtil = new SparkTestUtil(SparkConstants.PORT);
 
     @Test
@@ -39,7 +45,7 @@ public class MetricSetupTest
     public void shouldAddTimedRoute() throws IOException
     {
         final String timed = "/timed";
-        MetricSetup.timeRoute(timed, route(timed), MetricSetup.Verb.GET);
+        MetricSetup.timeRoute(timed, route(timed), MetricSetup.Verb.PUT);
 
         requestTestRoute(timed);
 
@@ -52,7 +58,7 @@ public class MetricSetupTest
     public void shouldAddMeterRoute() throws IOException
     {
         final String metered = "/metered";
-        MetricSetup.meterRoute(metered, route(metered), MetricSetup.Verb.GET);
+        MetricSetup.meterRoute(metered, route(metered), MetricSetup.Verb.PUT);
 
         requestTestRoute(metered);
 
@@ -62,15 +68,55 @@ public class MetricSetupTest
     }
 
     @Test
-    public void shouldTimeAndMeterRoute() throws IOException
+    public void shouldTimeAndMeterRouteForGet() throws IOException
     {
-        final String timedAndMetered = "/timedAndMetered";
+        final String name = "timedAndMeteredGet";
+        final String timedAndMetered = SLASH + name;
         MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetup.Verb.GET);
 
         requestTestRoute(timedAndMetered);
 
         final HttpResponse httpResponse = getMetricsResponse();
-        assertResponseContains(httpResponse, TIMER_TIMED, METER_METERED);
+        assertResponseContains(httpResponse, TIMER + name, METER + name);
+    }
+
+    @Test
+    public void shouldTimeAndMeterRouteForPost() throws IOException
+    {
+        final String name = "timedAndMeteredPost";
+        final String timedAndMetered = SLASH + name;
+        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetup.Verb.POST);
+
+        requestTestRoute(timedAndMetered);
+
+        final HttpResponse httpResponse = getMetricsResponse();
+        assertResponseContains(httpResponse, TIMER + name, METER + name);
+    }
+
+    @Test
+    public void shouldTimeAndMeterRouteForPut() throws IOException
+    {
+        final String name = "timedAndMeteredPut";
+        final String timedAndMetered = SLASH + name;
+        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetup.Verb.PUT);
+
+        requestTestRoute(timedAndMetered);
+
+        final HttpResponse httpResponse = getMetricsResponse();
+        assertResponseContains(httpResponse, TIMER + name, METER + name);
+    }
+
+    @Test
+    public void shouldTimeAndMeterRouteForDelete() throws IOException
+    {
+        final String name = "timedAndMeteredDelete";
+        final String timedAndMetered = SLASH + name;
+        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetup.Verb.PUT);
+
+        requestTestRoute(timedAndMetered);
+
+        final HttpResponse httpResponse = getMetricsResponse();
+        assertResponseContains(httpResponse, TIMER + name, METER + name);
     }
 
     private void assertResponseContains(final HttpResponse httpResponse, final String... expected) throws IOException
