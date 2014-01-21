@@ -40,10 +40,10 @@ public class MetricSetup
         registerRoute();
         switch (verb)
         {
-            case GET:Spark.get(makeMeterRoute(path, route));
-            case POST:Spark.post(makeMeterRoute(path, route));
-            case PUT:Spark.put(makeMeterRoute(path, route));
-            case DELETE:Spark.delete(makeMeterRoute(path, route));
+            case GET:Spark.get(makeMeterRoute(path, route));break;
+            case POST:Spark.post(makeMeterRoute(path, route));break;
+            case PUT:Spark.put(makeMeterRoute(path, route));break;
+            case DELETE:Spark.delete(makeMeterRoute(path, route));break;
         }
     }
 
@@ -57,10 +57,10 @@ public class MetricSetup
         registerRoute();
         switch (verb)
         {
-            case GET:Spark.get(makeMeterRoute(path, makeTimerRoute(path, route)));
-            case POST:Spark.post(makeMeterRoute(path, makeTimerRoute(path, route)));
-            case PUT:Spark.put(makeMeterRoute(path, makeTimerRoute(path, route)));
-            case DELETE:Spark.delete(makeMeterRoute(path, makeTimerRoute(path, route)));
+            case GET:Spark.get(makeMeterRoute(path, makeTimerRoute(path, route)));break;
+            case POST:Spark.post(makeMeterRoute(path, makeTimerRoute(path, route)));break;
+            case PUT:Spark.put(makeMeterRoute(path, makeTimerRoute(path, route)));break;
+            case DELETE:Spark.delete(makeMeterRoute(path, makeTimerRoute(path, route)));break;
         }
     }
 }

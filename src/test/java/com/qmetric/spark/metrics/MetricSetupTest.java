@@ -11,6 +11,7 @@ import spark.utils.IOUtils;
 
 import java.io.IOException;
 
+import static com.qmetric.spark.metrics.MetricSetup.Verb;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,7 +33,7 @@ public class MetricSetupTest
     @Test
     public void shouldRegisterRoute() throws IOException
     {
-        Spark.get(route("/path"));
+        Spark.get(route("/path", Verb.GET));
         final HttpResponse path1 = sparkTestUtil.get("path");
         EntityUtils.consumeQuietly(path1.getEntity());
 
@@ -45,7 +46,7 @@ public class MetricSetupTest
     public void shouldAddTimedRoute() throws IOException
     {
         final String timed = "/timed";
-        MetricSetup.timeRoute(timed, route(timed), MetricSetup.Verb.PUT);
+        MetricSetup.timeRoute(timed, route(timed, Verb.PUT), Verb.PUT);
 
         requestTestRoute(timed);
 
@@ -58,7 +59,7 @@ public class MetricSetupTest
     public void shouldAddMeterRoute() throws IOException
     {
         final String metered = "/metered";
-        MetricSetup.meterRoute(metered, route(metered), MetricSetup.Verb.PUT);
+        MetricSetup.meterRoute(metered, route(metered, Verb.PUT), Verb.PUT);
 
         requestTestRoute(metered);
 
@@ -72,7 +73,7 @@ public class MetricSetupTest
     {
         final String name = "timedAndMeteredGet";
         final String timedAndMetered = SLASH + name;
-        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetup.Verb.GET);
+        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered, Verb.GET), Verb.GET);
 
         requestTestRoute(timedAndMetered);
 
@@ -85,7 +86,7 @@ public class MetricSetupTest
     {
         final String name = "timedAndMeteredPost";
         final String timedAndMetered = SLASH + name;
-        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetup.Verb.POST);
+        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered, Verb.POST), Verb.POST);
 
         requestTestRoute(timedAndMetered);
 
@@ -98,7 +99,7 @@ public class MetricSetupTest
     {
         final String name = "timedAndMeteredPut";
         final String timedAndMetered = SLASH + name;
-        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetup.Verb.PUT);
+        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered, Verb.PUT), Verb.PUT);
 
         requestTestRoute(timedAndMetered);
 
@@ -107,13 +108,15 @@ public class MetricSetupTest
     }
 
     @Test
-    public void shouldTimeAndMeterRouteForDelete() throws IOException
+    public void shouldTimeAndMeterRouteForDeleteWherePutExistsWithSamePath() throws IOException
     {
-        final String name = "timedAndMeteredDelete";
-        final String timedAndMetered = SLASH + name;
-        MetricSetup.timeAndMeterRoute(timedAndMetered, route(timedAndMetered), MetricSetup.Verb.PUT);
+        final String name = "timedAndMeteredDeleteWherePutHasSamePath";
+        final String timedAndMeteredPath = SLASH + name;
 
-        requestTestRoute(timedAndMetered);
+        MetricSetup.timeAndMeterRoute(timedAndMeteredPath, route(timedAndMeteredPath, Verb.PUT), Verb.PUT);
+        MetricSetup.timeAndMeterRoute(timedAndMeteredPath, route(timedAndMeteredPath, Verb.DELETE), Verb.DELETE);
+
+        requestTestDeleteRoute(timedAndMeteredPath);
 
         final HttpResponse httpResponse = getMetricsResponse();
         assertResponseContains(httpResponse, TIMER + name, METER + name);
@@ -139,13 +142,21 @@ public class MetricSetupTest
         EntityUtils.consumeQuietly(getPath.getEntity());
     }
 
-    private Route route(final String path)
+    private void requestTestDeleteRoute(final String path)
+    {
+        final HttpResponse deletePath = sparkTestUtil.delete(path);
+        EntityUtils.consumeQuietly(deletePath.getEntity());
+    }
+
+    private Route route(final String path, final Verb expectedMethod)
     {
         return new Route(path)
         {
             @Override public Object handle(final Request request, final Response response)
             {
-                return "path";
+                final Verb method = Verb.valueOf(request.raw().getMethod());
+                assertThat(method == expectedMethod, is(true));
+                return path;
             }
         };
     }
