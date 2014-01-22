@@ -23,16 +23,24 @@ public class MetricSetup
         registerRoute();
         switch (verb)
         {
-            case GET:Spark.get(makeTimerRoute(path, route));break;
-            case POST:Spark.post(makeTimerRoute(path, route));break;
-            case PUT:Spark.put(makeTimerRoute(path, route));break;
-            case DELETE:Spark.delete(makeTimerRoute(path, route));break;
+            case GET:
+                Spark.get(makeTimerRoute(path, route));
+                break;
+            case POST:
+                Spark.post(makeTimerRoute(path, route));
+                break;
+            case PUT:
+                Spark.put(makeTimerRoute(path, route));
+                break;
+            case DELETE:
+                Spark.delete(makeTimerRoute(path, route));
+                break;
         }
     }
 
     public static Route makeTimerRoute(final String path, final Route route)
     {
-        return new RouteTimerWrapper(path, METRIC_REGISTRY, route);
+        return new RouteTimerWrapper(METRIC_REGISTRY, route);
     }
 
     public static void meterRoute(final String path, final Route route, final Verb verb)
@@ -40,10 +48,14 @@ public class MetricSetup
         registerRoute();
         switch (verb)
         {
-            case GET:Spark.get(makeMeterRoute(path, route));
-            case POST:Spark.post(makeMeterRoute(path, route));
-            case PUT:Spark.put(makeMeterRoute(path, route));
-            case DELETE:Spark.delete(makeMeterRoute(path, route));
+            case GET:
+                Spark.get(makeMeterRoute(path, route));
+            case POST:
+                Spark.post(makeMeterRoute(path, route));
+            case PUT:
+                Spark.put(makeMeterRoute(path, route));
+            case DELETE:
+                Spark.delete(makeMeterRoute(path, route));
         }
     }
 
@@ -57,10 +69,14 @@ public class MetricSetup
         registerRoute();
         switch (verb)
         {
-            case GET:Spark.get(makeMeterRoute(path, makeTimerRoute(path, route)));
-            case POST:Spark.post(makeMeterRoute(path, makeTimerRoute(path, route)));
-            case PUT:Spark.put(makeMeterRoute(path, makeTimerRoute(path, route)));
-            case DELETE:Spark.delete(makeMeterRoute(path, makeTimerRoute(path, route)));
+            case GET:
+                Spark.get(makeMeterRoute(path, makeTimerRoute(path, route)));
+            case POST:
+                Spark.post(makeMeterRoute(path, makeTimerRoute(path, route)));
+            case PUT:
+                Spark.put(makeMeterRoute(path, makeTimerRoute(path, route)));
+            case DELETE:
+                Spark.delete(makeMeterRoute(path, makeTimerRoute(path, route)));
         }
     }
 }

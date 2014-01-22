@@ -5,30 +5,35 @@ import com.codahale.metrics.Timer;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.RoutePathReader;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
 public class RouteTimerWrapper extends Route
 {
-    private static final String REGEX = "/";
+
+    public static final String TIMER_NAME_PREFIX = "timer";
 
     private final Route route;
 
     private final Timer timer;
 
-    public RouteTimerWrapper(final String path, final MetricRegistry metricRegistry, final Route route)
+    public RouteTimerWrapper(final MetricRegistry metricRegistry, final Route route)
     {
-        super(path);
+        super(RoutePathReader.path(route));
         this.route = route;
-        timer = metricRegistry.timer(name("timer", path.split(REGEX)));
+        this.timer = metricRegistry.timer(name(TIMER_NAME_PREFIX, RoutePathReader.path(route).split("/")));
     }
 
     @Override public Object handle(final Request request, final Response response)
     {
         final Timer.Context context = timer.time();
-        try {
+        try
+        {
             return route.handle(request, response);
-        }finally {
+        }
+        finally
+        {
             context.stop();
         }
     }
