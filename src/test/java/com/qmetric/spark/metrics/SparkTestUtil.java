@@ -28,9 +28,9 @@ class SparkTestUtil
         httpClient = new DefaultHttpClient(connectionManager);
     }
 
-    public HttpResponse get(final String s)
+    public HttpResponse get(final String path)
     {
-        final String cleaned = s.replace("/", "");
+        final String cleaned = path.replace("/", "");
         try
         {
             return httpClient.execute(new HttpGet(String.format(URL_TEMPLATE, PORT, cleaned)));
