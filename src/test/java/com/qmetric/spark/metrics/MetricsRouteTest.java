@@ -23,7 +23,7 @@ public class MetricsRouteTest
     public void init()
     {
         final MetricRegistry metricRegistry = new MetricRegistry();
-        Spark.get(new RouteMeterWrapper(PingRoute.PATH, metricRegistry, new RouteTimerWrapper(PingRoute.PATH, metricRegistry, new PingRoute())));
+        Spark.get(new RouteMeterWrapper(metricRegistry, new RouteTimerWrapper(PingRoute.PATH, metricRegistry, new PingRoute())));
         Spark.get(new MetricsRoute(metricRegistry));
 
         sparkTestUtil = new SparkTestUtil(PORT);

@@ -7,19 +7,22 @@ import spark.Response;
 import spark.Route;
 
 import static com.codahale.metrics.MetricRegistry.name;
+import static spark.RoutePathReader.path;
 
 public class RouteMeterWrapper extends Route
 {
-    private static final String REGEX = "/";
+
+    public static final String METER_NAME_PREFIX = "meter";
+
     private final Route route;
 
     private final Meter meter;
 
-    public RouteMeterWrapper(final String path, final MetricRegistry metricRegistry, final Route route)
+    public RouteMeterWrapper(final MetricRegistry metricRegistry, final Route route)
     {
-        super(path);
+        super(path(route));
         this.route = route;
-        meter = metricRegistry.meter(name("meter", path.split(REGEX)));
+        this.meter = metricRegistry.meter(name(METER_NAME_PREFIX, path(route).split("/")));
     }
 
     @Override public Object handle(final Request request, final Response response)

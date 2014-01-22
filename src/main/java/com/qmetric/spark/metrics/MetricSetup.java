@@ -49,7 +49,7 @@ public class MetricSetup
 
     public static Route makeMeterRoute(final String path, final Route route)
     {
-        return new RouteMeterWrapper(path, METRIC_REGISTRY, route);
+        return new RouteMeterWrapper(METRIC_REGISTRY, route);
     }
 
     public static void timeAndMeterRoute(final String path, final Route route, final Verb verb)
