@@ -9,12 +9,15 @@ public class CustomHealthCheck extends HealthCheck
 {
     private final URL url;
 
-    private String message;
+    private final String unHealthyMessage;
+
+    private final String healthyMessage;
 
     public CustomHealthCheck(final URL url)
     {
         this.url = url;
-        message = String.format(HostHealthCheck.UNABLE_TO_CONNECT_TO_HOST_S, url.toString());
+        unHealthyMessage = String.format(HostHealthCheck.UNABLE_TO_CONNECT_TO_HOST_S, url.toString());
+        healthyMessage = String.format(HostHealthCheck.PING_SUCCESSFUL, url.toString());
     }
 
     @Override protected Result check() throws Exception
@@ -24,17 +27,17 @@ public class CustomHealthCheck extends HealthCheck
             final boolean status = new Resty().text(url.toURI()).status(200);
             if (status)
             {
-                return Result.healthy();
+                return Result.healthy(healthyMessage);
             }
             else
             {
 
-                return Result.unhealthy(message);
+                return Result.unhealthy(unHealthyMessage);
             }
         }
         catch (Exception e)
         {
-            return Result.unhealthy(message);
+            return Result.unhealthy(unHealthyMessage);
         }
     }
 }
