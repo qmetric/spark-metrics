@@ -28,7 +28,7 @@ public class RouteMeterWrapperTest
 
     final MetricRegistry metricRegistry = mock(MetricRegistry.class);
 
-    Meter meter = new Meter();
+    final Meter meter = new Meter();
 
     {
         when(metricRegistry.meter(any(String.class))).thenReturn(meter);
@@ -45,7 +45,7 @@ public class RouteMeterWrapperTest
     Route route = new RouteMeterWrapper(metricRegistry, delegateRoute);
 
     @Test
-    public void gets_route_from_delegate_route()
+    public void gets_route_path_from_delegate_route()
     {
         assertThat(path(route)).isEqualTo(path(delegateRoute));
     }
