@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class HealthCheckSetup
 {
-    private static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();
+    public static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();
 
     public static void registerRoute()
     {
