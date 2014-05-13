@@ -16,6 +16,7 @@ import static com.qmetric.spark.metrics.DBHealthCheck.HealthCheckQuery.MYSQL_HEA
 public class DBHealthCheck extends HealthCheck
 {
     private final static Logger LOGGER = LoggerFactory.getLogger(DBHealthCheck.class);
+
     private final DataSource dataSource;
 
     private final UnHealthyMessage unHealthyMessage;
@@ -48,12 +49,8 @@ public class DBHealthCheck extends HealthCheck
 
     @Override protected Result check() throws Exception
     {
-        try
+        try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement())
         {
-            final Connection connection = dataSource.getConnection();
-
-            final Statement statement = connection.createStatement();
-
             final boolean execute = statement.execute(healthCheckQuery.sql);
 
             if (execute)
@@ -115,6 +112,5 @@ public class DBHealthCheck extends HealthCheck
         {
             message = String.format("Connection to database successful Host: %s username %s", url, userName);
         }
-
     }
 }
