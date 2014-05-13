@@ -1,5 +1,6 @@
 package com.qmetric.spark.metrics;
 
+import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import spark.Spark;
 
@@ -39,5 +40,16 @@ public class HealthCheckSetup
     {
         registerRoute();
         HEALTH_CHECK_REGISTRY.register(db, new DBHealthCheck(dataSource));
+    }
+
+    public static void addHealthCheck(final String name, final HealthCheck healthCheck)
+    {
+        registerRoute();
+        HEALTH_CHECK_REGISTRY.register(name, healthCheck);
+    }
+
+    public static void removeHealthCheck(final String name)
+    {
+        HEALTH_CHECK_REGISTRY.unregister(name);
     }
 }

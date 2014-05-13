@@ -1,5 +1,6 @@
 package com.qmetric.spark.metrics;
 
+import com.codahale.metrics.health.HealthCheck;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.http.HttpResponse;
 import org.junit.Before;
@@ -19,10 +20,11 @@ import static com.qmetric.spark.metrics.MockDataSource.failingDataSource;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class HealthCheckSetupTest
 {
-
     private static final String SERVICE_NAME = "service-name";
 
     private SparkTestUtil sparkTestUtil;
@@ -37,9 +39,13 @@ public class HealthCheckSetupTest
     @Test
     public void shouldInitialiseHealthCheck() throws IOException
     {
+        HealthCheckSetup.addHealthCheck(SERVICE_NAME, "http://localhost:50001");
+
         final HttpResponse httpResponse = getHealthCheckResponse();
 
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(200));
+
+        HealthCheckSetup.removeHealthCheck(SERVICE_NAME);
     }
 
     @Test
@@ -53,14 +59,35 @@ public class HealthCheckSetupTest
         final HttpResponse httpResponse = getHealthCheckResponse();
 
         assertOutputContainsServiceName(httpResponse);
+
+        HealthCheckSetup.removeHealthCheck(SERVICE_NAME);
     }
 
     @Test
     public void registerIsOptional() throws IOException
     {
+        HealthCheckSetup.addHealthCheck(SERVICE_NAME, "http://localhost:50001");
+
         final HttpResponse httpResponse = getHealthCheckResponse();
 
         assertOutputContainsServiceName(httpResponse);
+
+        HealthCheckSetup.removeHealthCheck(SERVICE_NAME);
+    }
+
+    @Test
+    public void shouldInitialiseSpecialisedHealthCheck() throws IOException
+    {
+        final String special = "special";
+        final HealthCheck healthCheck = mock(HealthCheck.class);
+        when(healthCheck.execute()).thenReturn(HealthCheck.Result.healthy());
+        HealthCheckSetup.addHealthCheck(special, healthCheck);
+
+        final HttpResponse httpResponse = getHealthCheckResponse();
+
+        assertOutputContains(httpResponse, special);
+
+        HealthCheckSetup.removeHealthCheck(special);
     }
 
     @Test
@@ -75,11 +102,14 @@ public class HealthCheckSetupTest
             }
         });
 
-        HealthCheckSetup.addHealthCheck("custom", new URL("http://localhost:50001/custom"));
+        final String custom = "custom";
+        HealthCheckSetup.addHealthCheck(custom, new URL("http://localhost:50001/custom"));
 
         final HttpResponse httpResponse = getHealthCheckResponse();
 
-        assertOutputContainsServiceName(httpResponse);
+       assertOutputContains(httpResponse, custom);
+
+        HealthCheckSetup.removeHealthCheck(custom);
     }
 
     @Test
@@ -90,22 +120,27 @@ public class HealthCheckSetupTest
         dataSource.setUrl("jdbc:hsqldb:mem:dbhc");
         dataSource.setUsername("sa");
         dataSource.setPassword("");
-        HealthCheckSetup.addHealthCheck("HCDB", dataSource, "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS");
+        final String hcdb = "HCDB";
+        HealthCheckSetup.addHealthCheck(hcdb, dataSource, "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS");
 
         final HttpResponse httpResponse = getHealthCheckResponse();
 
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(200));
+
+        HealthCheckSetup.removeHealthCheck(hcdb);
     }
 
     @Test
     public void shouldReturnInternalErrorIfUnhealthy() throws Exception
     {
-        HealthCheckSetup.addHealthCheck("failing-host", "host");
+        final String name = "failing-host";
+        HealthCheckSetup.addHealthCheck(name, "host");
 
         final HttpResponse healthCheck = sparkTestUtil.get(HealthCheckRoute.PATH);
 
         assertThat(healthCheck.getStatusLine().getStatusCode(), is(500));
 
+        HealthCheckSetup.removeHealthCheck(name);
     }
 
     @Test
@@ -137,5 +172,10 @@ public class HealthCheckSetupTest
     private void assertOutputContainsServiceName(final HttpResponse httpResponse) throws IOException
     {
         assertThat(IOUtils.toString(httpResponse.getEntity().getContent()), containsString(SERVICE_NAME));
+    }
+
+    private void assertOutputContains(final HttpResponse httpResponse, final String content) throws IOException
+    {
+        assertThat(IOUtils.toString(httpResponse.getEntity().getContent()), containsString(content));
     }
 }
