@@ -28,12 +28,12 @@ public class MetricSetupTest
 
     private static final String SLASH = "/";
 
-    private SparkTestUtil sparkTestUtil = new SparkTestUtil(SparkConstants.PORT);
+    private SparkTestUtil sparkTestUtil = new SparkTestUtil(4567);
 
     @Test
     public void shouldRegisterRoute() throws IOException
     {
-        Spark.get(route("/path", Verb.GET));
+        Spark.get("/path", route("/path", Verb.GET));
         final HttpResponse path1 = sparkTestUtil.get("path");
         EntityUtils.consumeQuietly(path1.getEntity());
 
@@ -52,7 +52,7 @@ public class MetricSetupTest
 
         final HttpResponse httpResponse = getMetricsResponse();
 
-        assertResponseContains(httpResponse, TIMER_TIMED);
+        assertResponseContains(httpResponse, "com.qmetric.spark.metrics.MetricSetupTest$1.timer");
     }
 
     @Test
@@ -65,7 +65,7 @@ public class MetricSetupTest
 
         final HttpResponse httpResponse = getMetricsResponse();
 
-        assertResponseContains(httpResponse, METER_METERED);
+        assertResponseContains(httpResponse, "com.qmetric.spark.metrics.MetricSetupTest$1.meter", "com.qmetric.spark.metrics.RouteTimerWrapper.meter");
     }
 
     @Test
@@ -78,7 +78,7 @@ public class MetricSetupTest
         requestTestRoute(timedAndMetered);
 
         final HttpResponse httpResponse = getMetricsResponse();
-        assertResponseContains(httpResponse, TIMER + name, METER + name);
+        assertResponseContains(httpResponse, "com.qmetric.spark.metrics.MetricSetupTest$1.timer", "com.qmetric.spark.metrics.RouteTimerWrapper.meter");
     }
 
     @Test
@@ -91,7 +91,7 @@ public class MetricSetupTest
         requestTestRoute(timedAndMetered);
 
         final HttpResponse httpResponse = getMetricsResponse();
-        assertResponseContains(httpResponse, TIMER + name, METER + name);
+        assertResponseContains(httpResponse, "com.qmetric.spark.metrics.MetricSetupTest$1.timer", "com.qmetric.spark.metrics.RouteTimerWrapper.meter");
     }
 
     @Test
@@ -104,7 +104,7 @@ public class MetricSetupTest
         requestTestRoute(timedAndMetered);
 
         final HttpResponse httpResponse = getMetricsResponse();
-        assertResponseContains(httpResponse, TIMER + name, METER + name);
+        assertResponseContains(httpResponse, "com.qmetric.spark.metrics.MetricSetupTest$1.timer", "com.qmetric.spark.metrics.RouteTimerWrapper.meter");
     }
 
     @Test
@@ -119,7 +119,7 @@ public class MetricSetupTest
         requestTestDeleteRoute(timedAndMeteredPath);
 
         final HttpResponse httpResponse = getMetricsResponse();
-        assertResponseContains(httpResponse, TIMER + name, METER + name);
+        assertResponseContains(httpResponse, "com.qmetric.spark.metrics.MetricSetupTest$1.timer", "com.qmetric.spark.metrics.RouteTimerWrapper.meter");
     }
 
     private void assertResponseContains(final HttpResponse httpResponse, final String... expected) throws IOException
@@ -133,7 +133,7 @@ public class MetricSetupTest
 
     private HttpResponse getMetricsResponse()
     {
-        return sparkTestUtil.get(MetricsRoute.PATH);
+        return sparkTestUtil.get("/metrics");
     }
 
     private void requestTestRoute(final String path)
@@ -150,7 +150,7 @@ public class MetricSetupTest
 
     private Route route(final String path, final Verb expectedMethod)
     {
-        return new Route(path)
+        return new Route()
         {
             @Override public Object handle(final Request request, final Response response)
             {

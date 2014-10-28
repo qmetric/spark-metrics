@@ -8,18 +8,16 @@ import spark.Route;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
-public class RouteMeterWrapper extends Route
+public class RouteMeterWrapper implements Route
 {
-    private static final String REGEX = "/";
     private final Route route;
 
     private final Meter meter;
 
-    public RouteMeterWrapper(final String path, final MetricRegistry metricRegistry, final Route route)
+    public RouteMeterWrapper(final MetricRegistry metricRegistry, final Route route)
     {
-        super(path);
         this.route = route;
-        meter = metricRegistry.meter(name("meter", path.split(REGEX)));
+        meter = metricRegistry.meter(name(route.getClass(), "meter"));
     }
 
     @Override public Object handle(final Request request, final Response response)

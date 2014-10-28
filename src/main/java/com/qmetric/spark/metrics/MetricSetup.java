@@ -15,7 +15,7 @@ public class MetricSetup
 
     public static void registerRoute()
     {
-        Spark.get(new MetricsRoute(METRIC_REGISTRY));
+        Spark.get("/metrics", new MetricsRoute(METRIC_REGISTRY));
     }
 
     public static void timeRoute(final String path, final Route route, final Verb verb)
@@ -23,16 +23,16 @@ public class MetricSetup
         registerRoute();
         switch (verb)
         {
-            case GET:Spark.get(makeTimerRoute(path, route));break;
-            case POST:Spark.post(makeTimerRoute(path, route));break;
-            case PUT:Spark.put(makeTimerRoute(path, route));break;
-            case DELETE:Spark.delete(makeTimerRoute(path, route));break;
+            case GET:Spark.get(path, makeTimerRoute(route));break;
+            case POST:Spark.post(path, makeTimerRoute(route));break;
+            case PUT:Spark.put(path, makeTimerRoute(route));break;
+            case DELETE:Spark.delete(path, makeTimerRoute(route));break;
         }
     }
 
-    public static Route makeTimerRoute(final String path, final Route route)
+    public static Route makeTimerRoute(final Route route)
     {
-        return new RouteTimerWrapper(path, METRIC_REGISTRY, route);
+        return new RouteTimerWrapper(METRIC_REGISTRY, route);
     }
 
     public static void meterRoute(final String path, final Route route, final Verb verb)
@@ -40,16 +40,16 @@ public class MetricSetup
         registerRoute();
         switch (verb)
         {
-            case GET:Spark.get(makeMeterRoute(path, route));break;
-            case POST:Spark.post(makeMeterRoute(path, route));break;
-            case PUT:Spark.put(makeMeterRoute(path, route));break;
-            case DELETE:Spark.delete(makeMeterRoute(path, route));break;
+            case GET:Spark.get(path, makeMeterRoute(route));break;
+            case POST:Spark.post(path, makeMeterRoute(route));break;
+            case PUT:Spark.put(path, makeMeterRoute(route));break;
+            case DELETE:Spark.delete(path, makeMeterRoute(route));break;
         }
     }
 
-    public static Route makeMeterRoute(final String path, final Route route)
+    public static Route makeMeterRoute(final Route route)
     {
-        return new RouteMeterWrapper(path, METRIC_REGISTRY, route);
+        return new RouteMeterWrapper(METRIC_REGISTRY, route);
     }
 
     public static void timeAndMeterRoute(final String path, final Route route, final Verb verb)
@@ -57,10 +57,10 @@ public class MetricSetup
         registerRoute();
         switch (verb)
         {
-            case GET:Spark.get(makeMeterRoute(path, makeTimerRoute(path, route)));break;
-            case POST:Spark.post(makeMeterRoute(path, makeTimerRoute(path, route)));break;
-            case PUT:Spark.put(makeMeterRoute(path, makeTimerRoute(path, route)));break;
-            case DELETE:Spark.delete(makeMeterRoute(path, makeTimerRoute(path, route)));break;
+            case GET:Spark.get(path, makeMeterRoute(makeTimerRoute(route)));break;
+            case POST:Spark.post(path, makeMeterRoute(makeTimerRoute(route)));break;
+            case PUT:Spark.put(path, makeMeterRoute(makeTimerRoute(route)));break;
+            case DELETE:Spark.delete(path, makeMeterRoute(makeTimerRoute(route)));break;
         }
     }
 }

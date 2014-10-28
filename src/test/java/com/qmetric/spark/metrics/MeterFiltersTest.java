@@ -6,9 +6,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 import org.junit.Test;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Spark;
 
 import java.util.SortedMap;
@@ -26,16 +23,10 @@ public class MeterFiltersTest
     @Before
     public void init()
     {
-        Spark.get(new Route("/meter")
-        {
-            @Override public Object handle(final Request request, final Response response)
-            {
-                return "";
-            }
-        });
+        Spark.get("/meter", (request, response) -> "");
 
         metricRegistry = new MetricRegistry();
-        final MeterFilters meterFilters = new MeterFilters("/meter", metricRegistry, this.getClass(), "meter");
+        final MeterFilters meterFilters = new MeterFilters(metricRegistry, this.getClass(), "meter");
 
         Spark.before(meterFilters.beforeFilter());
 

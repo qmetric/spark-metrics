@@ -8,19 +8,16 @@ import spark.Route;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
-public class RouteTimerWrapper extends Route
+public class RouteTimerWrapper implements Route
 {
-    private static final String REGEX = "/";
-
     private final Route route;
 
     private final Timer timer;
 
-    public RouteTimerWrapper(final String path, final MetricRegistry metricRegistry, final Route route)
+    public RouteTimerWrapper(final MetricRegistry metricRegistry, final Route route)
     {
-        super(path);
         this.route = route;
-        timer = metricRegistry.timer(name("timer", path.split(REGEX)));
+        timer = metricRegistry.timer(name(route.getClass(), "timer"));
     }
 
     @Override public Object handle(final Request request, final Response response)

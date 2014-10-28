@@ -23,8 +23,9 @@ public class MetricsRouteTest
     public void init()
     {
         final MetricRegistry metricRegistry = new MetricRegistry();
-        Spark.get(new RouteMeterWrapper(PingRoute.PATH, metricRegistry, new RouteTimerWrapper(PingRoute.PATH, metricRegistry, new PingRoute())));
-        Spark.get(new MetricsRoute(metricRegistry));
+//        Spark.setPort(PORT);
+        Spark.get("/ping", new RouteMeterWrapper(metricRegistry, new RouteTimerWrapper(metricRegistry, new PingRoute())));
+        Spark.get("/metrics", new MetricsRoute(metricRegistry));
 
         sparkTestUtil = new SparkTestUtil(PORT);
 
@@ -37,12 +38,12 @@ public class MetricsRouteTest
     {
         final HttpResponse httpResponse = sparkTestUtil.get("ping");
         EntityUtils.consumeQuietly(httpResponse.getEntity());
-        final HttpResponse metrics = sparkTestUtil.get(MetricsRoute.PATH);
+        final HttpResponse metrics = sparkTestUtil.get("/metrics");
 
         final StringWriter writer = new StringWriter();
         IOUtils.copy(metrics.getEntity().getContent(), writer);
 
-        assertThat(writer.toString(), containsString("timer.ping"));
-        assertThat(writer.toString(), containsString("meter.ping"));
+        assertThat(writer.toString(), containsString("com.qmetric.spark.metrics.PingRoute.timer"));
+        assertThat(writer.toString(), containsString("com.qmetric.spark.metrics.RouteTimerWrapper.meter"));
     }
 }

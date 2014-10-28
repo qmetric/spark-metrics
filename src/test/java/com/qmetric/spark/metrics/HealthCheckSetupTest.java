@@ -5,9 +5,6 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.http.HttpResponse;
 import org.junit.Before;
 import org.junit.Test;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Spark;
 import spark.utils.IOUtils;
 import uk.co.datumedge.hamcrest.json.SameJSONAs;
@@ -93,14 +90,11 @@ public class HealthCheckSetupTest
     @Test
     public void shouldInitialiseCustomHealthCheck() throws IOException
     {
-        Spark.get(new Route("/custom")
-        {
-            @Override public Object handle(final Request request, final Response response)
-            {
-                response.raw().setStatus(200);
-                return "hi";
-            }
+        Spark.get("/custom", (request, response) -> {
+            response.raw().setStatus(200);
+            return "";
         });
+
 
         final String custom = "custom";
         HealthCheckSetup.addHealthCheck(custom, new URL("http://localhost:50001/custom"));
@@ -136,7 +130,7 @@ public class HealthCheckSetupTest
         final String name = "failing-host";
         HealthCheckSetup.addHealthCheck(name, "host");
 
-        final HttpResponse healthCheck = sparkTestUtil.get(HealthCheckRoute.PATH);
+        final HttpResponse healthCheck = sparkTestUtil.get("/healthcheck");
 
         assertThat(healthCheck.getStatusLine().getStatusCode(), is(500));
 
@@ -149,7 +143,7 @@ public class HealthCheckSetupTest
         HealthCheckSetup.addHealthCheck("failing-host", "host");
         HealthCheckSetup.addHealthCheck("failing-db", failingDataSource());
 
-        final HttpResponse healthCheck = sparkTestUtil.get(HealthCheckRoute.PATH);
+        final HttpResponse healthCheck = sparkTestUtil.get("/healthcheck");
 
         final String actual = IOUtils.toString(healthCheck.getEntity().getContent());
         assertThat(actual, SameJSONAs.sameJSONAs("{\n" +
@@ -166,7 +160,7 @@ public class HealthCheckSetupTest
 
     private HttpResponse getHealthCheckResponse()
     {
-        return sparkTestUtil.get(HealthCheckRoute.PATH);
+        return sparkTestUtil.get("/healthcheck");
     }
 
     private void assertOutputContainsServiceName(final HttpResponse httpResponse) throws IOException

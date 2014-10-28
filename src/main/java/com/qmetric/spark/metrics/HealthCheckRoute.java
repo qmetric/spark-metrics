@@ -14,18 +14,14 @@ import java.io.OutputStream;
 import java.util.Map;
 import java.util.SortedMap;
 
-public class HealthCheckRoute extends Route
+public class HealthCheckRoute implements Route
 {
-    public static final String PATH = "/healthcheck";
-
     private final HealthCheckRegistry registry;
 
     private final ObjectMapper objectMapper;
 
     public HealthCheckRoute(final HealthCheckRegistry registry)
     {
-        super(PATH);
-
         this.registry = registry;
         this.objectMapper = new ObjectMapper().registerModule(new HealthCheckModule());
     }

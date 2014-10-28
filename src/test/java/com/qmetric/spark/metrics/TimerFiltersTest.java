@@ -6,9 +6,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 import org.junit.Test;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Spark;
 
 import java.util.SortedMap;
@@ -26,16 +23,10 @@ public class TimerFiltersTest
     @Before
     public void init()
     {
-        Spark.get(new Route("/home")
-        {
-            @Override public Object handle(final Request request, final Response response)
-            {
-                return "sweet home";
-            }
-        });
+        Spark.get("/home", (request, response) -> "sweet home");
 
         metricRegistry = new MetricRegistry();
-        final TimerFilters timerFilters = new TimerFilters("/home", metricRegistry, this.getClass(), "metrics");
+        final TimerFilters timerFilters = new TimerFilters(metricRegistry, this.getClass(), "metrics");
 
         Spark.before(timerFilters.beforeFilter());
 

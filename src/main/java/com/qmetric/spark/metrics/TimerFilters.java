@@ -16,10 +16,10 @@ public class TimerFilters
 
     private final BeforeFilter beforeFilter;
 
-    public TimerFilters(final String path, final MetricRegistry metricRegistry, final Class<?> aClass, final String... name)
+    public TimerFilters(final MetricRegistry metricRegistry, final Class<?> aClass, final String... name)
     {
-        beforeFilter = new BeforeFilter(path, metricRegistry, aClass, name);
-        afterFilter = new AfterFilter(path);
+        beforeFilter = new BeforeFilter(metricRegistry, aClass, name);
+        afterFilter = new AfterFilter();
     }
 
     public BeforeFilter beforeFilter()
@@ -32,13 +32,12 @@ public class TimerFilters
         return afterFilter;
     }
 
-    private class BeforeFilter extends Filter
+    private class BeforeFilter implements Filter
     {
         private final Timer timer;
 
-        public BeforeFilter(final String path, final MetricRegistry metricRegistry, final Class<?> aClass, final String... name)
+        public BeforeFilter(final MetricRegistry metricRegistry, final Class<?> aClass, final String... name)
         {
-            super(path);
             timer = metricRegistry.timer(name(aClass, name));
         }
 
@@ -48,13 +47,8 @@ public class TimerFilters
         }
     }
 
-    private class AfterFilter extends Filter
+    private class AfterFilter implements Filter
     {
-        public AfterFilter(final String path)
-        {
-            super(path);
-        }
-
         @Override public void handle(final Request request, final Response response)
         {
             context.stop();

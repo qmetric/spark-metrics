@@ -15,7 +15,7 @@ public class HealthCheckSetup
 
     public static void registerRoute()
     {
-        Spark.get(new HealthCheckRoute(HEALTH_CHECK_REGISTRY));
+        Spark.get("/healthcheck", new HealthCheckRoute(HEALTH_CHECK_REGISTRY));
     }
 
     public static void addHealthCheck(final String name, final String host)

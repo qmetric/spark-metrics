@@ -6,9 +6,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 import org.junit.Test;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Spark;
 
 import java.util.SortedMap;
@@ -27,13 +24,7 @@ public class RouteMeterWrapperTest
     public void init()
     {
         metricRegistry = new MetricRegistry();
-        Spark.get(new RouteMeterWrapper("/meter-wrapper", metricRegistry, new Route("/meter-wrapper")
-        {
-            @Override public Object handle(final Request request, final Response response)
-            {
-                return "";
-            }
-        }));
+        Spark.get("/meter-wrapper", new RouteMeterWrapper(metricRegistry, (request, response) -> ""));
 
         sparkTestUtil = new SparkTestUtil(PORT);
     }

@@ -13,17 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class MetricsRoute extends Route
+public class MetricsRoute implements Route
 {
-    public static final String PATH = "/metrics";
-
     private final MetricRegistry metricRegistry;
 
     private final ObjectMapper objectMapper;
 
     public MetricsRoute(final MetricRegistry metricRegistry)
     {
-        super(PATH);
         this.metricRegistry = metricRegistry;
         objectMapper = new ObjectMapper().registerModule(new MetricsModule(TimeUnit.SECONDS, TimeUnit.MILLISECONDS, true));
     }

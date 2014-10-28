@@ -5,16 +5,9 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class PingRoute extends Route
+public class PingRoute implements Route
 {
-    public static final String PATH = "/ping";
-
     final PingServlet pingServlet = new PingServlet();
-
-    public PingRoute()
-    {
-        super(PATH);
-    }
 
     @Override public Object handle(final Request request, final Response response)
     {
