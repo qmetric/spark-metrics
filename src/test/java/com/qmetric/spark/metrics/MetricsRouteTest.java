@@ -11,7 +11,6 @@ import spark.utils.IOUtils;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import static com.qmetric.spark.metrics.SparkConstants.PORT;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -27,7 +26,7 @@ public class MetricsRouteTest
         Spark.get("/ping", new RouteMeterWrapper(metricRegistry, new RouteTimerWrapper(metricRegistry, new PingRoute())));
         Spark.get("/metrics", new MetricsRoute(metricRegistry));
 
-        sparkTestUtil = new SparkTestUtil(PORT);
+        sparkTestUtil = new SparkTestUtil();
 
         final HttpResponse httpResponse = sparkTestUtil.get("ping");
         EntityUtils.consumeQuietly(httpResponse.getEntity());

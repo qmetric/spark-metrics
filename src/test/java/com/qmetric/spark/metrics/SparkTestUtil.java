@@ -4,12 +4,13 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.BasicClientConnectionManager;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
 import java.io.IOException;
 
@@ -18,17 +19,19 @@ import static java.lang.String.format;
 
 class SparkTestUtil
 {
-    private final DefaultHttpClient httpClient;
-
     private static final String URL_TEMPLATE = "http://localhost:%d/%s";
 
-    public SparkTestUtil(final int port)
+    private final CloseableHttpClient httpClient;
+
+    public SparkTestUtil()
     {
-        Scheme http = new Scheme("http", port, PlainSocketFactory.getSocketFactory());
-        SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(http);
-        ClientConnectionManager connectionManager = new BasicClientConnectionManager(schemeRegistry);
-        httpClient = new DefaultHttpClient(connectionManager);
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("http", PlainConnectionSocketFactory.INSTANCE)
+                .build();
+
+        final PoolingHttpClientConnectionManager connectionManager1 = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+
+        httpClient = HttpClients.createMinimal(connectionManager1);
     }
 
     public HttpResponse get(final String path)

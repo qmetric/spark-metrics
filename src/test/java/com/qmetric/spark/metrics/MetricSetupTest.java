@@ -28,7 +28,7 @@ public class MetricSetupTest
 
     private static final String SLASH = "/";
 
-    private SparkTestUtil sparkTestUtil = new SparkTestUtil(4567);
+    private SparkTestUtil sparkTestUtil = new SparkTestUtil();
 
     @Test
     public void shouldRegisterRoute() throws IOException

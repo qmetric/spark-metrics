@@ -29,7 +29,7 @@ public class HealthCheckSetupTest
     @Before
     public void initHelper()
     {
-        sparkTestUtil = new SparkTestUtil(SparkConstants.PORT);
+        sparkTestUtil = new SparkTestUtil();
         HealthCheckSetup.addHealthCheck(SERVICE_NAME, "http://localhost:50001");
     }
 

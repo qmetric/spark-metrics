@@ -10,7 +10,6 @@ import spark.Spark;
 
 import java.util.SortedMap;
 
-import static com.qmetric.spark.metrics.SparkConstants.PORT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -26,7 +25,7 @@ public class RouteMeterWrapperTest
         metricRegistry = new MetricRegistry();
         Spark.get("/meter-wrapper", new RouteMeterWrapper(metricRegistry, (request, response) -> ""));
 
-        sparkTestUtil = new SparkTestUtil(PORT);
+        sparkTestUtil = new SparkTestUtil();
     }
 
     @Test

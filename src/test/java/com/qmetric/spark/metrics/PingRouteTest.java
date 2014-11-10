@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import static com.qmetric.spark.metrics.SparkConstants.PORT;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -18,7 +17,7 @@ public class PingRouteTest
     @Test
     public void shouldPing() throws IOException
     {
-        final SparkTestUtil sparkTestUtil = new SparkTestUtil(PORT);
+        final SparkTestUtil sparkTestUtil = new SparkTestUtil();
         final HttpResponse httpResponse = sparkTestUtil.get("ping");
 
         final StringWriter writer = new StringWriter();
