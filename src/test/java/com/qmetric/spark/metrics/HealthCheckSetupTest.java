@@ -88,25 +88,6 @@ public class HealthCheckSetupTest
     }
 
     @Test
-    public void shouldInitialiseCustomHealthCheck() throws IOException
-    {
-        Spark.get("/custom", (request, response) -> {
-            response.raw().setStatus(200);
-            return "";
-        });
-
-
-        final String custom = "custom";
-        HealthCheckSetup.addHealthCheck(custom, new URL("http://localhost:50001/custom"));
-
-        final HttpResponse httpResponse = getHealthCheckResponse();
-
-       assertOutputContains(httpResponse, custom);
-
-        HealthCheckSetup.removeHealthCheck(custom);
-    }
-
-    @Test
     public void shouldInitialiseDBHealthCheck() throws SQLException, IOException
     {
         final BasicDataSource dataSource = new BasicDataSource();
@@ -146,6 +127,9 @@ public class HealthCheckSetupTest
         final HttpResponse healthCheck = sparkTestUtil.get("/healthcheck");
 
         final String actual = IOUtils.toString(healthCheck.getEntity().getContent());
+
+        System.out.println(actual);
+
         assertThat(actual, SameJSONAs.sameJSONAs("{\n" +
                                                  "  \"failing-db\" : {\n" +
                                                  "    \"healthy\" : false,\n" +

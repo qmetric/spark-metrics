@@ -24,12 +24,6 @@ public class HealthCheckSetup
         HEALTH_CHECK_REGISTRY.register(name, new HostHealthCheck(host));
     }
 
-    public static void addHealthCheck(final String custom, final URL url)
-    {
-        registerRoute();
-        HEALTH_CHECK_REGISTRY.register(custom, new CustomHealthCheck(url));
-    }
-
     public static void addHealthCheck(final String db, final DataSource dataSource, final String query) throws SQLException
     {
         registerRoute();

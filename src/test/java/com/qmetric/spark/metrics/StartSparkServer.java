@@ -19,7 +19,6 @@ import static com.qmetric.spark.metrics.SparkConstants.PORT;
                      ServerHealthCheckTest.class, //
                      TimerFiltersTest.class, //
                      HostHealthCheckTest.class, //
-                     CustomHealthCheckTest.class, //
                      HealthCheckSetupTest.class, //
                      MetricSetupTest.class  //
                     })
