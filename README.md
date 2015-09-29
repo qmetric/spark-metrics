@@ -1,6 +1,7 @@
-[![Build Status](https://travis-ci.org/qmetric/spark-metrics.png)](https://travis-ci.org/qmetric/spark-metrics)
+Spark Metrics
+====================
 
-#Spark Metrics
+[![Build Status](https://travis-ci.org/qmetric/spark-metrics.png)](https://travis-ci.org/qmetric/spark-metrics)
 
 #####Purpose
 A library of Route decorators to add metrics to spark based applications
