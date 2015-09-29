@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/qmetric/spark-metrics.png)](https://travis-ci.org/qmetric/spark-metrics)
+
 #Spark Metrics
 
 #####Purpose
