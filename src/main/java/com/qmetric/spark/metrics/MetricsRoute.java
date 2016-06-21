@@ -21,8 +21,13 @@ public class MetricsRoute implements Route
 
     public MetricsRoute(final MetricRegistry metricRegistry)
     {
+        this(metricRegistry, true);
+    }
+
+    public MetricsRoute(final MetricRegistry metricRegistry, boolean showSamples)
+    {
         this.metricRegistry = metricRegistry;
-        objectMapper = new ObjectMapper().registerModule(new MetricsModule(TimeUnit.SECONDS, TimeUnit.MILLISECONDS, true));
+        objectMapper = new ObjectMapper().registerModule(new MetricsModule(TimeUnit.SECONDS, TimeUnit.MILLISECONDS, showSamples));
     }
 
     @Override public Object handle(final Request request, final Response response)
