@@ -20,8 +20,7 @@ public class RouteTimerWrapper implements Route
         timer = metricRegistry.timer(name(route.getClass(), "timer"));
     }
 
-    @Override public Object handle(final Request request, final Response response)
-    {
+    @Override public Object handle(final Request request, final Response response) throws Exception {
         final Timer.Context context = timer.time();
         try {
             return route.handle(request, response);

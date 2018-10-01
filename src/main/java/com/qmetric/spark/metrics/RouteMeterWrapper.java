@@ -20,8 +20,7 @@ public class RouteMeterWrapper implements Route
         meter = metricRegistry.meter(name(route.getClass(), "meter"));
     }
 
-    @Override public Object handle(final Request request, final Response response)
-    {
+    @Override public Object handle(final Request request, final Response response) throws Exception {
         meter.mark();
         return route.handle(request, response);
     }
